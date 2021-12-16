@@ -52,7 +52,7 @@ for (var k in listMember) {
     // console.log("Key is " + k + ", value is " + listMember[k]);
     console.log("get file" + `${listMember[k]}/${listMember[k]}.json`);
     fs.readFile(
-      `${listMember[k]}/${listMember[k]}.json`,
+      `../${listMember[k]}/${listMember[k]}.json`,
       "utf8",
       async (err, data) => {
         if (err) {
