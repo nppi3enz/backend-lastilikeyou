@@ -71,7 +71,7 @@ for (var k in listMember) {
             images: element.urls,
             caption: element.edge_media_to_caption.edges[0]?.node?.text ?? "",
             createdAt: new Date(element.taken_at_timestamp * 1000),
-            member: "mahnmook",
+            member: k,
             username: element.username,
             link: `https://www.instagram.com/p/${element.shortcode}`,
             source: "instagram",
