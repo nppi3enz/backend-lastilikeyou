@@ -50,7 +50,7 @@ const listMember = {
 for (var k in listMember) {
   if (listMember.hasOwnProperty(k)) {
     // console.log("Key is " + k + ", value is " + listMember[k]);
-    console.log("get file" + `${listMember[k]}/${listMember[k]}.json`);
+    console.log("get file " + `${listMember[k]}`);
     fs.readFile(
       `../${listMember[k]}/${listMember[k]}.json`,
       "utf8",
