@@ -51,7 +51,11 @@ for (const [key, value] of Object.entries(listMember)) {
   fs.readFile(`../${value}/${value}.json`, "utf8")
     .then((resp) => JSON.parse(resp))
     .then((rawData) => {
+      let count = 0;
       rawData.GraphImages.forEach(async (element) => {
+        if (count > 5) {
+          return;
+        }
         const docRef = db.collection("social_feeds").doc(`ig_${element.id}`);
         console.log(`name ` + key);
         docRef.set({
@@ -63,6 +67,7 @@ for (const [key, value] of Object.entries(listMember)) {
           link: `https://www.instagram.com/p/${element.shortcode}`,
           source: "instagram",
         });
+        count++;
       });
     });
 }
