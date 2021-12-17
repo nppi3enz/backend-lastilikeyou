@@ -16,7 +16,7 @@ initializeApp({
 });
 
 const db = getFirestore();
-const fs = require("fs");
+const fs = require("fs").promises;
 
 const listMember = {
   lidth: "lastidol_th",
@@ -47,37 +47,22 @@ const listMember = {
   my: "my.lastidolthofficial",
   yodnam: "yodnam.lastidolthofficial",
 };
-for (var k in listMember) {
-  if (listMember.hasOwnProperty(k)) {
-    console.log("Key is " + k + ", value is " + listMember[k]);
-    console.log("get file " + `${listMember[k]}`);
-    fs.readFile(
-      `../${listMember[k]}/${listMember[k]}.json`,
-      "utf8",
-      async (err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        const rawData = JSON.parse(data);
-        rawData.GraphImages.forEach(async (element) => {
-          // console.log(element.id);
-          // console.log(element.display_url);
-          // console.log(element.edge_media_to_caption.edges[0]?.node?.text ?? "-");
-          // console.log(element.taken_at_timestamp);
-
-          const docRef = db.collection("social_feeds").doc(`ig_${element.id}`);
-          await docRef.set({
-            images: element.urls,
-            caption: element.edge_media_to_caption.edges[0]?.node?.text ?? "",
-            createdAt: new Date(element.taken_at_timestamp * 1000),
-            member: k,
-            username: element.username,
-            link: `https://www.instagram.com/p/${element.shortcode}`,
-            source: "instagram",
-          });
+for (const [key, value] of Object.entries(listMember)) {
+  fs.readFile(`../${value}/${value}.json`, "utf8")
+    .then((resp) => JSON.parse(resp))
+    .then((rawData) => {
+      rawData.GraphImages.forEach(async (element) => {
+        const docRef = db.collection("social_feeds").doc(`ig_${element.id}`);
+        console.log(`name ` + key);
+        docRef.set({
+          images: element.urls,
+          caption: element.edge_media_to_caption.edges[0]?.node?.text ?? "",
+          createdAt: new Date(element.taken_at_timestamp * 1000),
+          member: key,
+          username: element.username,
+          link: `https://www.instagram.com/p/${element.shortcode}`,
+          source: "instagram",
         });
-      }
-    );
-  }
+      });
+    });
 }
